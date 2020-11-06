@@ -10,7 +10,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alertmanager-config
-  namespace: kube-logging
+  namespace: kube-metrics
   labels:
     app.kubernetes.io/name: metrics
     app.kubernetes.io/component: alertmanager
@@ -83,7 +83,7 @@ metadata:
     app.kubernetes.io/component: alertmanager
 spec:
   # Used to configure a stable network identity for the StatefulSet Pods 
-  # e.g. pod_name.metrics-alertmanager-operated.kube-logging.svc:6783
+  # e.g. pod_name.metrics-alertmanager-operated.kube-metrics.svc:6783
   serviceName: "alertmanager-operated"
   # To scale the number of Alertmanager replicas, you must add `—cluster.peer` addresses 
   # for any additional Alertmanager Pods in the `args` section of the `containers` spec. 
@@ -110,8 +110,8 @@ spec:
             - --web.listen-address=:9093
             - --web.route-prefix=/
             - --cluster.listen-address=$(POD_IP):6783
-            - --cluster.peer=alertmanager-0.alertmanager-operated.kube-logging.svc:6783
-            - --cluster.peer=alertmanager-1.alertmanager-operated.kube-logging.svc:6783
+            - --cluster.peer=alertmanager-0.alertmanager-operated.kube-metrics.svc:6783
+            - --cluster.peer=alertmanager-1.alertmanager-operated.kube-metrics.svc:6783
             - --log.level=debug
           env:
           - name: POD_IP
@@ -191,7 +191,7 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: grafana-dashboards
-  namespace: kube-logging
+  namespace: kube-metrics
   labels:
     app.kubernetes.io/name: metrics
     app.kubernetes.io/component: grafana
@@ -221,7 +221,7 @@ data:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  namespace: kube-logging
+  namespace: kube-metrics
   name: grafana
 ---
 ---
@@ -309,7 +309,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: kube-logging
+  namespace: kube-metrics
   labels:
     k8s-app: grafana
     app.kubernetes.io/name: metrics
@@ -328,7 +328,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: grafana
-  namespace: kube-logging
+  namespace: kube-metrics
   labels: &Labels
     k8s-app: grafana
     app.kubernetes.io/name: metrics
@@ -448,7 +448,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kube-state-metrics
-  namespace: kube-logging
+  namespace: kube-metrics
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -974,14 +974,14 @@ data:
         - role: endpoints
           namespaces:
             names:
-            - kube-logging
+            - kube-metrics
         scheme: http
         path_prefix: /
         timeout: 10s
         relabel_configs:
         - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_label_k8s_app]
           separator: ;
-          regex: kube-logging;alertmanager
+          regex: kube-metrics;alertmanager
           replacement: $1
           action: keep
         - source_labels: [__meta_kubernetes_endpoint_port_name]
@@ -1166,7 +1166,7 @@ data:
         action: replace
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_label_k8s_app]
         separator: ;
-        regex: kube-logging;alertmanager
+        regex: kube-metrics;alertmanager
         replacement: $1
         action: keep
       - source_labels: [__meta_kubernetes_namespace]
@@ -1262,7 +1262,7 @@ data:
         action: labelmap
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_label_k8s_app]
         separator: ;
-        regex: kube-logging;kube-state-metrics
+        regex: kube-metrics;kube-state-metrics
         replacement: $1
         action: keep
     - job_name: kubelet
@@ -1309,7 +1309,7 @@ data:
         action: replace
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_label_k8s_app]
         separator: ;
-        regex: kube-logging;node-exporter
+        regex: kube-metrics;node-exporter
         replacement: $1
         action: keep
       - source_labels: [__meta_kubernetes_namespace]
@@ -1351,7 +1351,7 @@ data:
         action: replace
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_label_k8s_app]
         separator: ;
-        regex: kube-logging;prometheus
+        regex: kube-metrics;prometheus
         replacement: $1
         action: keep
       - source_labels: [__meta_kubernetes_namespace]
@@ -1568,7 +1568,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: prometheus
-  namespace: kube-logging
+  namespace: kube-metrics
   labels: &Labels
     k8s-app: prometheus
     app.kubernetes.io/name: metrics
