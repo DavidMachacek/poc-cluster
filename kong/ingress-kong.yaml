@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: informes-api
+  namespace: gs
+  labels:
+    app: api  
+  annotations:
+    # Note that the annotation below is deprecated as of Kubernetes 1.18
+    # in favor of the new spec.ingressClassName field. At the moment of writing
+    # (Kong Ingress Controller v0.9.0), Kong Ingress Controller does not support
+    # the new format yet.
+    kubernetes.io/ingress.class: kong-ingress-class 
+spec:
+  rules:
+    - host: david.cz
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: informers
+              servicePort: 80

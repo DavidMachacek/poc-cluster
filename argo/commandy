@@ -1,0 +1,7 @@
+kubectl create secret docker-registry ibmregistrykey --docker-server=de.icr.io \
+        --docker-username=iamapikey --docker-password=oTiqOutJhhQS7Z2ZdOuPKB7zer8wZQCW89Mt9CSTEaCP \
+        --docker-email=davido.machacek@gmail.com -n test
+
+skopeo --registries.d . --insecure-policy copy --sign-by davido.machacek@gmail.com docker-daemon:informer:v1 docker://de.icr.io/david/informer:signed  --dest-creds iamapikey:oTiqOutJhhQS7Z2ZdOuPKB7zer8wZQCW89Mt9CSTEaCP
+
+kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "ibmregistrykey"}]}' -n test

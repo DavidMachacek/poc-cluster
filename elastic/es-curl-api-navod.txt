@@ -1,0 +1,5 @@
+curl https://158.177.163.83:32552/_cluster/state?pretty -u elastic -k
+kubectl get secret elasticsearch-sample-es-elastic-user -o go-template='{{.data.elastic | base64decode}}'
+
+
+

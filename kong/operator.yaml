@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription 
+metadata:
+  name: kong-operator
+  namespace: operators
+spec: 
+  channel: alpha
+  name: kong
+  source: operatorhubio-catalog
+  sourceNamespace: ibm-system
