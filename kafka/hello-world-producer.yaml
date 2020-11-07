@@ -34,7 +34,7 @@ spec:
           - name: CA_CRT
             valueFrom:
               secretKeyRef: 
-                name: my-cluster-cluster-ca-cert
+                name: kafka-cluster-cluster-ca-cert
                 key: ca.crt
           - name: USER_CRT
             valueFrom:
@@ -78,7 +78,7 @@ spec:
           - name: CA_CRT
             valueFrom:
               secretKeyRef: 
-                name: my-cluster-cluster-ca-cert
+                name: kafka-cluster-cluster-ca-cert
                 key: ca.crt
           - name: USER_CRT
             valueFrom:
