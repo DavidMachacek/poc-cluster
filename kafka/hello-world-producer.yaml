@@ -20,7 +20,7 @@ spec:
         image: strimzi/hello-world-producer:latest
         env:
           - name: BOOTSTRAP_SERVERS
-            value: my-cluster-kafka-bootstrap:9093
+            value: kafka-cluster-kafka-bootstrap:9093
           - name: TOPIC
             value: my-topic-replicated
           - name: DELAY_MS
@@ -72,7 +72,7 @@ spec:
         image: strimzi/hello-world-consumer:latest
         env:
           - name: BOOTSTRAP_SERVERS
-            value: my-cluster-kafka-bootstrap:9093
+            value: kafka-cluster-kafka-bootstrap:9093
           - name: TOPIC
             value: my-topic-replicated
           - name: CA_CRT
